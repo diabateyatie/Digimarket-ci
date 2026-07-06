@@ -6,17 +6,17 @@
 <title>DigiMarket CI — Catalogue</title>
 <style>
   :root {
-    --kaki-fonce: #3A3924;
+    --kaki-fonce: #57544A;
     --kaki-recherche: #4B4A31;
     --creme-header: #F3EEE2;
-    --fond-clair: #F5F2E6;
+    --fond-clair: #E8DCAF;
     --creme-carte: #FFFFFF;
     --orange: #E8944F;
     --orange-clair: #F2B378;
     --texte-fonce: #2A2A1C;
     --texte-clair: #EDE9DA;
     --gris-texte: #8A8770;
-    --bordure: #E1DCC8;
+    --bordure: #DCD3A8;
     --etoile: #D9A441;
   }
 
@@ -104,7 +104,46 @@
     color: white; font-weight: 600;
   }
 
-  .separateur-menu { width: 1px; height: 22px; background: #5C5A3E; margin: 0 4px; }
+  .separateur-menu { width: 1px; height: 22px; background: #6B6858; margin: 0 4px; }
+
+  .menu-blog-wrapper { position: relative; }
+
+  .dropdown-blog {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: var(--creme-carte);
+    border: 1px solid var(--bordure);
+    border-radius: 10px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.18);
+    min-width: 220px;
+    padding: 6px;
+    z-index: 10;
+  }
+
+  .dropdown-blog.ouvert { display: block; }
+
+  .dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 13.5px;
+    color: var(--texte-fonce);
+    cursor: pointer;
+  }
+
+  .dropdown-item:hover { background: var(--fond-clair); }
+
+  .dropdown-item.actif {
+    background: var(--orange);
+    color: white;
+    font-weight: 600;
+  }
 
   .compteur-produits { margin-left: auto; color: #C9C6B4; font-size: 13px; }
 
@@ -279,7 +318,16 @@
     <button class="cat-btn" data-cat="formation">Formations vidéo</button>
     <button class="cat-btn" data-cat="template">Templates</button>
     <span class="separateur-menu"></span>
-    <button class="cat-btn" data-cat="blog">Blog</button>
+    <div class="menu-blog-wrapper" id="menu-blog-wrapper">
+      <button class="cat-btn" id="btn-blog" data-cat="blog">Blog ▾</button>
+      <div class="dropdown-blog" id="dropdown-blog">
+        <button class="dropdown-item actif" data-rubrique="tout">Toutes les rubriques</button>
+        <button class="dropdown-item" data-rubrique="marketing">Marketing</button>
+        <button class="dropdown-item" data-rubrique="developpement-personnel">Développement personnel</button>
+        <button class="dropdown-item" data-rubrique="sport">Sport</button>
+        <button class="dropdown-item" data-rubrique="relation">Relation</button>
+      </div>
+    </div>
     <span class="compteur-produits"><span id="nb-produits">12</span> produits</span>
   </nav>
 
@@ -305,18 +353,18 @@
     ];
 
     const articles = [
-      { titre: "Comment structurer son offre de formation en ligne", auteur: "Équipe DigiMarket", date: "12 juin", desc: "Les bases pour construire une offre claire et vendable.", badge: null, img: "blog-cover-1" },
-      { titre: "5 erreurs à éviter en vendant des ebooks en Afrique de l'Ouest", auteur: "Awa Sangaré", date: "9 juin", desc: "Des pièges fréquents qui freinent les premières ventes.", badge: "nouveau", img: "blog-cover-2" },
-      { titre: "Mobile Money : le nerf de la guerre du e-commerce ivoirien", auteur: "Yao Kouassi", date: "5 juin", desc: "Pourquoi le paiement mobile décide du succès en ligne.", badge: null, img: "blog-cover-3" },
-      { titre: "Construire une marque personnelle en tant que créateur", auteur: "Fatou Diabaté", date: "2 juin", desc: "Se rendre reconnaissable avant de vendre quoi que ce soit.", badge: null, img: "blog-cover-4" },
-      { titre: "Stoïcisme et entrepreneuriat : rester stable dans l'incertitude", auteur: "Yatié Coaching", date: "29 mai", desc: "Une philosophie ancienne appliquée aux défis du business.", badge: "bestseller", img: "blog-cover-5" },
-      { titre: "Pourquoi le marché des templates explose en Côte d'Ivoire", auteur: "Studio Créatif Abidjan", date: "26 mai", desc: "La demande locale pour des outils visuels prêts à l'emploi.", badge: null, img: "blog-cover-6" },
-      { titre: "Fixer le juste prix de son ebook : méthode simple", auteur: "Ibrahim Traoré", date: "23 mai", desc: "Une méthode concrète pour ne pas sous-évaluer son travail.", badge: null, img: "blog-cover-7" },
-      { titre: "3 outils gratuits pour créer des visuels professionnels", auteur: "Équipe DigiMarket", date: "20 mai", desc: "Des alternatives accessibles sans budget design.", badge: "nouveau", img: "blog-cover-8" },
-      { titre: "La discipline avant la motivation", auteur: "Amara Koné", date: "17 mai", desc: "Ce que les entrepreneurs abidjanais répètent le plus souvent.", badge: null, img: "blog-cover-9" },
-      { titre: "Comment protéger ses fichiers numériques contre le piratage", auteur: "DigiTools CI", date: "14 mai", desc: "Des réflexes simples avant de mettre un produit en vente.", badge: null, img: "blog-cover-10" },
-      { titre: "Vendre une formation vidéo sans expérience technique", auteur: "Moussa Diarra", date: "11 mai", desc: "Le matériel minimal pour se lancer sérieusement.", badge: null, img: "blog-cover-11" },
-      { titre: "L'infériorité imposée : la déconstruire pour mieux entreprendre", auteur: "Yatié Coaching", date: "8 mai", desc: "Un regard critique sur les freins psychologiques hérités.", badge: "bestseller", img: "blog-cover-12" }
+      { titre: "Comment structurer son offre de formation en ligne", auteur: "Équipe DigiMarket", date: "12 juin", desc: "Les bases pour construire une offre claire et vendable.", badge: null, rubrique: "marketing", img: "blog-cover-1" },
+      { titre: "5 erreurs à éviter en vendant des ebooks en Afrique de l'Ouest", auteur: "Awa Sangaré", date: "9 juin", desc: "Des pièges fréquents qui freinent les premières ventes.", badge: "nouveau", rubrique: "marketing", img: "blog-cover-2" },
+      { titre: "Fixer le juste prix de son ebook : méthode simple", auteur: "Ibrahim Traoré", date: "23 mai", desc: "Une méthode concrète pour ne pas sous-évaluer son travail.", badge: null, rubrique: "marketing", img: "blog-cover-3" },
+      { titre: "Stoïcisme et entrepreneuriat : rester stable dans l'incertitude", auteur: "Yatié Coaching", date: "29 mai", desc: "Une philosophie ancienne appliquée aux défis du business.", badge: "bestseller", rubrique: "developpement-personnel", img: "blog-cover-4" },
+      { titre: "La discipline avant la motivation", auteur: "Amara Koné", date: "17 mai", desc: "Ce que les entrepreneurs abidjanais répètent le plus souvent.", badge: null, rubrique: "developpement-personnel", img: "blog-cover-5" },
+      { titre: "L'infériorité imposée : la déconstruire pour mieux entreprendre", auteur: "Yatié Coaching", date: "8 mai", desc: "Un regard critique sur les freins psychologiques hérités.", badge: "bestseller", rubrique: "developpement-personnel", img: "blog-cover-6" },
+      { titre: "Ce que le football ivoirien enseigne sur la discipline collective", auteur: "Yao Kouassi", date: "5 juin", desc: "Des leçons d'équipe transposables à toute organisation.", badge: null, rubrique: "sport", img: "blog-cover-7" },
+      { titre: "Préparation mentale : ce que les athlètes enseignent aux entrepreneurs", auteur: "Aïcha Bamba", date: "2 juin", desc: "Gérer la pression avant une échéance importante.", badge: "nouveau", rubrique: "sport", img: "blog-cover-8" },
+      { titre: "Suivre sa progression sportive comme on suit son business", auteur: "Moussa Diarra", date: "11 mai", desc: "La régularité des chiffres, à l'entraînement comme en affaires.", badge: null, rubrique: "sport", img: "blog-cover-9" },
+      { titre: "Réseauter à Abidjan : créer des relations professionnelles qui durent", auteur: "Fatou Diabaté", date: "26 mai", desc: "Construire un réseau sincère plutôt que transactionnel.", badge: null, rubrique: "relation", img: "blog-cover-10" },
+      { titre: "Vendre sans abîmer la confiance de ses clients", auteur: "DigiTools CI", date: "14 mai", desc: "Garder une relation saine avec ceux qui achètent chez soi.", badge: null, rubrique: "relation", img: "blog-cover-11" },
+      { titre: "Construire une marque personnelle sans perdre ses relations authentiques", auteur: "Studio Créatif Abidjan", date: "20 mai", desc: "Rester soi-même en devenant visible en ligne.", badge: "nouveau", rubrique: "relation", img: "blog-cover-12" }
     ];
 
     const grille = document.getElementById('grille-produits');
@@ -381,11 +429,23 @@
       `;
     }
 
-    function afficherContenu(mode) {
+    function nomRubrique(r) {
+      return {
+        tout: "Toutes les rubriques",
+        marketing: "Marketing",
+        "developpement-personnel": "Développement personnel",
+        sport: "Sport",
+        relation: "Relation"
+      }[r];
+    }
+
+    function afficherContenu(mode, rubrique) {
       if (mode === 'blog') {
-        grille.innerHTML = articles.map(carteArticle).join('');
-        nbProduitsEl.textContent = articles.length;
-        compteurLabel.lastChild.textContent = ' articles';
+        const r = rubrique || 'tout';
+        const liste = r === 'tout' ? articles : articles.filter(a => a.rubrique === r);
+        grille.innerHTML = liste.map(carteArticle).join('');
+        nbProduitsEl.textContent = liste.length;
+        compteurLabel.lastChild.textContent = ' articles · ' + nomRubrique(r);
         return;
       }
       const liste = mode === 'tout' ? produits : produits.filter(p => p.cat === mode);
@@ -395,11 +455,37 @@
     }
 
     boutonsCat.forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        if (btn.id === 'btn-blog') {
+          e.stopPropagation();
+          dropdownBlog.classList.toggle('ouvert');
+          return;
+        }
+        dropdownBlog.classList.remove('ouvert');
         boutonsCat.forEach(b => b.classList.remove('actif'));
         btn.classList.add('actif');
         afficherContenu(btn.dataset.cat);
       });
+    });
+
+    const dropdownBlog = document.getElementById('dropdown-blog');
+    const btnBlog = document.getElementById('btn-blog');
+    const itemsRubrique = document.querySelectorAll('.dropdown-item');
+
+    itemsRubrique.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        itemsRubrique.forEach(i => i.classList.remove('actif'));
+        item.classList.add('actif');
+        boutonsCat.forEach(b => b.classList.remove('actif'));
+        btnBlog.classList.add('actif');
+        dropdownBlog.classList.remove('ouvert');
+        afficherContenu('blog', item.dataset.rubrique);
+      });
+    });
+
+    document.addEventListener('click', () => {
+      dropdownBlog.classList.remove('ouvert');
     });
 
     afficherContenu('tout');
