@@ -76,6 +76,11 @@
     cursor: pointer; color: var(--texte-fonce);
   }
 
+  .btn-panier.active {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 2px rgba(232, 148, 79, 0.18);
+  }
+
   .btn-vendre {
     background: var(--orange); color: white; border: none;
     padding: 10px 20px; border-radius: 8px; font-weight: 600;
@@ -277,6 +282,308 @@
 
   .date-article { font-size: 11px; color: var(--gris-texte); }
 
+  body.modal-ouvert { overflow: hidden; }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 18, 12, 0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+
+  .modal-overlay[hidden] { display: none; }
+
+  .modal-fiche {
+    width: min(920px, 100%);
+    max-height: 90vh;
+    overflow: auto;
+    background: var(--creme-carte);
+    border-radius: 20px;
+    border: 1px solid var(--bordure);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    position: relative;
+    padding: 24px;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--fond-clair);
+    color: var(--kaki-fonce);
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .modal-contenu {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .modal-visuel {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    min-height: 280px;
+    background: #f3e9d5;
+  }
+
+  .modal-image {
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .modal-kicker {
+    display: inline-flex;
+    width: fit-content;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--fond-clair);
+    color: var(--kaki-fonce);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .modal-body h2 {
+    font-size: 24px;
+    line-height: 1.3;
+    color: var(--texte-fonce);
+  }
+
+  .modal-author {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .modal-rating {
+    color: var(--etoile);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .modal-rating span {
+    color: var(--gris-texte);
+    font-weight: 400;
+  }
+
+  .modal-prix-bloc {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .modal-prix {
+    color: var(--orange);
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .modal-prix-barre {
+    color: var(--gris-texte);
+    text-decoration: line-through;
+    font-size: 15px;
+  }
+
+  .modal-description,
+  .modal-article-texte p {
+    color: var(--texte-fonce);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  .modal-article-texte {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-meta-article {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--gris-texte);
+    font-size: 13px;
+  }
+
+  .btn-ajouter-panier,
+  .btn-ajouter-carte {
+    margin-top: 6px;
+    align-self: flex-start;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 9px;
+    background: var(--orange);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .btn-ajouter-panier:hover,
+  .btn-ajouter-carte:hover { background: var(--orange-clair); }
+
+  .btn-ajouter-panier:disabled,
+  .btn-ajouter-carte:disabled {
+    background: #6B8A5A;
+    cursor: default;
+    opacity: 1;
+  }
+
+  .btn-ajouter-carte {
+    margin-top: 10px;
+    align-self: stretch;
+    font-size: 12px;
+  }
+
+  .panier-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 18, 12, 0.7);
+    z-index: 1100;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .panier-overlay[hidden] { display: none; }
+
+  .panier-panneau {
+    width: min(420px, 100%);
+    height: 100%;
+    background: var(--creme-carte);
+    box-shadow: -16px 0 30px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 14px;
+  }
+
+  .panier-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--bordure);
+    padding-bottom: 12px;
+  }
+
+  .panier-header h3 { font-size: 18px; color: var(--texte-fonce); }
+
+  .panier-close-btn {
+    border: none;
+    background: var(--fond-clair);
+    color: var(--kaki-fonce);
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .panier-liste {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .panier-item {
+    display: flex;
+    gap: 10px;
+    border: 1px solid var(--bordure);
+    border-radius: 12px;
+    padding: 10px;
+    align-items: center;
+  }
+
+  .panier-item img {
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .panier-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .panier-item-info strong { font-size: 13px; color: var(--texte-fonce); }
+  .panier-item-info span { font-size: 12px; color: var(--gris-texte); }
+
+  .btn-retirer-panier {
+    border: none;
+    background: transparent;
+    color: var(--orange);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+  }
+
+  .panier-footer {
+    margin-top: auto;
+    border-top: 1px solid var(--bordure);
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .panier-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    color: var(--texte-fonce);
+  }
+
+  .btn-passer-commande {
+    border: none;
+    border-radius: 10px;
+    background: var(--orange);
+    color: white;
+    padding: 12px 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .panier-vide {
+    padding: 20px 0;
+    color: var(--gris-texte);
+    text-align: center;
+    font-size: 14px;
+  }
+
+  @media (max-width: 760px) {
+    .modal-contenu { grid-template-columns: 1fr; }
+  }
+
   @media (max-width: 480px) {
     .grille-produits { grid-template-columns: repeat(2, 1fr); }
   }
@@ -336,6 +643,27 @@
     <div class="grille-produits" id="grille-produits"></div>
   </main>
 
+  <div class="modal-overlay" id="modal-overlay" hidden>
+    <div class="modal-fiche" role="dialog" aria-modal="true" aria-labelledby="modal-titre">
+      <button class="modal-close" id="modal-close" aria-label="Fermer la fiche">×</button>
+      <div class="modal-contenu" id="modal-contenu"></div>
+    </div>
+  </div>
+
+  <div class="panier-overlay" id="panier-overlay" hidden>
+    <div class="panier-panneau" role="dialog" aria-modal="true" aria-labelledby="panier-titre">
+      <div class="panier-header">
+        <h3 id="panier-titre">Votre panier</h3>
+        <button class="panier-close-btn" id="panier-close" aria-label="Fermer le panier">×</button>
+      </div>
+      <div class="panier-liste" id="panier-liste"></div>
+      <div class="panier-footer">
+        <div class="panier-total"><span>Total</span><span id="panier-total">0 FCFA</span></div>
+        <button class="btn-passer-commande">Passer commande</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const produits = [
       { id: 1, cat: 'ebook', titre: "Construis-toi de l'intérieur", auteur: "Yatié Coaching", prix: 3500, prixOriginal: null, desc: "Reconstruire son identité intérieure avant la réussite extérieure.", badge: "bestseller", note: 4.9, avis: 214, vues: 1840, img: "ebook-cover-1" },
@@ -383,8 +711,9 @@
     }
 
     function carteProduit(p) {
+      const dejaDansPanier = estDansPanier(p.id);
       return `
-        <div class="carte-produit">
+        <div class="carte-produit" data-type="produit" data-title="${p.titre}">
           <div class="visuel-produit">
             ${p.badge ? `<span class="badge ${p.badge}">${nomBadge(p.badge)}</span>` : ''}
             <img src="${urlImage(p.img)}" alt="${p.titre}" loading="lazy">
@@ -404,6 +733,7 @@
               </div>
               <span class="categorie-tag">${nomCategorie(p.cat)}</span>
             </div>
+            <button class="btn-ajouter-carte" data-product-id="${p.id}" ${dejaDansPanier ? 'disabled' : ''}>${dejaDansPanier ? '✓ Déjà dans le panier' : 'Ajouter au panier'}</button>
           </div>
         </div>
       `;
@@ -411,7 +741,7 @@
 
     function carteArticle(a) {
       return `
-        <div class="carte-produit">
+        <div class="carte-produit" data-type="article" data-title="${a.titre}">
           <div class="visuel-produit">
             ${a.badge ? `<span class="badge ${a.badge}">${a.badge === 'bestseller' ? 'À la une' : 'Nouveau'}</span>` : ''}
             <img src="${urlImage(a.img)}" alt="${a.titre}" loading="lazy">
@@ -439,6 +769,156 @@
       }[r];
     }
 
+    function descriptionLongueProduit(p) {
+      return `${p.desc} Ce parcours a été pensé pour être concret et applicable au quotidien. Chaque idée est présentée de façon simple, avec des exemples adaptés au contexte local et des repères faciles à retenir. En suivant cette logique, il devient plus simple de transformer une idée en action durable.`;
+    }
+
+    function texteArticleLong(a) {
+      return `
+        <p>${a.titre} invite à revenir sur une question centrale, avec un angle pratique et accessible. L’objectif est de proposer des repères utiles pour mieux agir, mieux organiser et mieux avancer.</p>
+        <p>Dans ce type de contenu, l’idée n’est pas seulement d’informer, mais de donner un cadre simple pour observer ses habitudes, ses choix et ses priorités. On y trouve des conseils concrets à adapter selon son contexte et ses objectifs.</p>
+        <p>Le ton reste volontairement clair, afin d’offrir une lecture fluide, même en dehors d’un cadre professionnel. Chaque partie encourage à poser un regard neuf sur sa démarche et à progresser avec plus de stabilité.</p>
+      `;
+    }
+
+    function renderModalProduit(p) {
+      const badgeMarkup = p.badge ? `<span class="badge ${p.badge}">${nomBadge(p.badge)}</span>` : '';
+      const prixMarkup = p.prixOriginal
+        ? `<div class="modal-prix-bloc"><span class="modal-prix">${formaterPrix(p.prix)}</span><span class="modal-prix-barre">${formaterPrix(p.prixOriginal)}</span></div>`
+        : `<div class="modal-prix-bloc"><span class="modal-prix">${formaterPrix(p.prix)}</span></div>`;
+      const dejaDansPanier = estDansPanier(p.id);
+
+      return `
+        <div class="modal-visuel">
+          ${badgeMarkup}
+          <img class="modal-image" src="${urlImage(p.img)}" alt="${p.titre}">
+        </div>
+        <div class="modal-body">
+          <div class="modal-kicker">${nomCategorie(p.cat)}</div>
+          <h2 id="modal-titre">${p.titre}</h2>
+          <p class="modal-author">${p.auteur}</p>
+          <div class="modal-rating">★ ${p.note.toFixed(1)} <span>(${p.avis} avis)</span></div>
+          ${prixMarkup}
+          <p class="modal-description">${descriptionLongueProduit(p)}</p>
+          <button class="btn-ajouter-panier" data-product-id="${p.id}" ${dejaDansPanier ? 'disabled' : ''}>${dejaDansPanier ? '✓ Déjà dans le panier' : 'Ajouter au panier'}</button>
+        </div>
+      `;
+    }
+
+    function renderModalArticle(a) {
+      return `
+        <div class="modal-visuel">
+          ${a.badge ? `<span class="badge ${a.badge}">${a.badge === 'bestseller' ? 'À la une' : 'Nouveau'}</span>` : ''}
+          <img class="modal-image" src="${urlImage(a.img)}" alt="${a.titre}">
+        </div>
+        <div class="modal-body">
+          <div class="modal-kicker">Article · ${nomRubrique(a.rubrique)}</div>
+          <h2 id="modal-titre">${a.titre}</h2>
+          <p class="modal-author">${a.auteur}</p>
+          <div class="modal-meta-article"><span>${a.date}</span><span>${nomRubrique(a.rubrique)}</span></div>
+          <div class="modal-article-texte">${texteArticleLong(a)}</div>
+        </div>
+      `;
+    }
+
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalContenu = document.getElementById('modal-contenu');
+    const modalClose = document.getElementById('modal-close');
+    const panierOverlay = document.getElementById('panier-overlay');
+    const panierListe = document.getElementById('panier-liste');
+    const panierClose = document.getElementById('panier-close');
+    const panierTotal = document.getElementById('panier-total');
+    const btnPanier = document.querySelector('.btn-panier');
+    const compteurPanierEl = document.getElementById('compteur-panier');
+    let panier = [];
+    let modalTypeCourant = null;
+    let modalTitreCourant = null;
+
+    function estDansPanier(productId) {
+      return panier.some(item => item.id === productId);
+    }
+
+    function ajouterAuPanier(productId) {
+      const produit = produits.find(p => p.id === productId);
+      if (!produit || estDansPanier(productId)) return;
+      panier.push({ ...produit });
+      renderPanier();
+      renderCartButtons();
+    }
+
+    function retirerDuPanier(productId) {
+      panier = panier.filter(item => item.id !== productId);
+      renderPanier();
+      renderCartButtons();
+    }
+
+    function renderCartButtons() {
+      document.querySelectorAll('.btn-ajouter-carte').forEach(btn => {
+        const productId = Number(btn.dataset.productId);
+        const dejaDansPanier = estDansPanier(productId);
+        btn.disabled = dejaDansPanier;
+        btn.textContent = dejaDansPanier ? '✓ Déjà dans le panier' : 'Ajouter au panier';
+      });
+      document.querySelectorAll('.btn-ajouter-panier').forEach(btn => {
+        const productId = Number(btn.dataset.productId);
+        const dejaDansPanier = estDansPanier(productId);
+        btn.disabled = dejaDansPanier;
+        btn.textContent = dejaDansPanier ? '✓ Déjà dans le panier' : 'Ajouter au panier';
+      });
+    }
+
+    function renderPanier() {
+      compteurPanierEl.textContent = panier.length;
+      btnPanier.classList.toggle('active', panier.length > 0);
+      const total = panier.reduce((sum, item) => sum + item.prix, 0);
+      panierTotal.textContent = formaterPrix(total);
+
+      if (!panier.length) {
+        panierListe.innerHTML = '<div class="panier-vide">Votre panier est vide</div>';
+        return;
+      }
+
+      panierListe.innerHTML = panier.map(item => `
+        <div class="panier-item">
+          <img src="${urlImage(item.img)}" alt="${item.titre}">
+          <div class="panier-item-info">
+            <strong>${item.titre}</strong>
+            <span>${formaterPrix(item.prix)}</span>
+          </div>
+          <button class="btn-retirer-panier" data-product-id="${item.id}">Retirer</button>
+        </div>
+      `).join('');
+    }
+
+    function ouvrirModal(type, titre) {
+      const item = type === 'article'
+        ? articles.find(a => a.titre === titre)
+        : produits.find(p => p.titre === titre);
+
+      if (!item) return;
+
+      modalTypeCourant = type;
+      modalTitreCourant = titre;
+      modalContenu.innerHTML = type === 'article' ? renderModalArticle(item) : renderModalProduit(item);
+      modalOverlay.hidden = false;
+      document.body.classList.add('modal-ouvert');
+    }
+
+    function fermerModal() {
+      modalOverlay.hidden = true;
+      document.body.classList.remove('modal-ouvert');
+    }
+
+    function ouvrirPanier() {
+      panierOverlay.hidden = false;
+      document.body.classList.add('modal-ouvert');
+    }
+
+    function fermerPanier() {
+      panierOverlay.hidden = true;
+      document.body.classList.remove('modal-ouvert');
+    }
+
     function afficherContenu(mode, rubrique) {
       if (mode === 'blog') {
         const r = rubrique || 'tout';
@@ -452,6 +932,7 @@
       grille.innerHTML = liste.map(carteProduit).join('');
       nbProduitsEl.textContent = liste.length;
       compteurLabel.lastChild.textContent = ' produits';
+      renderCartButtons();
     }
 
     boutonsCat.forEach(btn => {
@@ -484,10 +965,56 @@
       });
     });
 
+    grille.addEventListener('click', (event) => {
+      const boutonAjout = event.target.closest('.btn-ajouter-carte');
+      if (boutonAjout) {
+        event.stopPropagation();
+        ajouterAuPanier(Number(boutonAjout.dataset.productId));
+        return;
+      }
+      const carte = event.target.closest('.carte-produit');
+      if (!carte) return;
+      ouvrirModal(carte.dataset.type, carte.dataset.title);
+    });
+
+    modalContenu.addEventListener('click', (event) => {
+      const boutonAjout = event.target.closest('.btn-ajouter-panier');
+      if (!boutonAjout) return;
+      ajouterAuPanier(Number(boutonAjout.dataset.productId));
+      if (modalTypeCourant === 'produit') {
+        ouvrirModal(modalTypeCourant, modalTitreCourant);
+      }
+    });
+
+    panierListe.addEventListener('click', (event) => {
+      const boutonRetirer = event.target.closest('.btn-retirer-panier');
+      if (!boutonRetirer) return;
+      retirerDuPanier(Number(boutonRetirer.dataset.productId));
+    });
+
+    modalClose.addEventListener('click', fermerModal);
+    modalOverlay.addEventListener('click', (event) => {
+      if (event.target === modalOverlay) fermerModal();
+    });
+    panierClose.addEventListener('click', fermerPanier);
+    panierOverlay.addEventListener('click', (event) => {
+      if (event.target === panierOverlay) fermerPanier();
+    });
+    btnPanier.addEventListener('click', ouvrirPanier);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        if (!modalOverlay.hidden) fermerModal();
+        else if (!panierOverlay.hidden) fermerPanier();
+      }
+    });
+
     document.addEventListener('click', () => {
       dropdownBlog.classList.remove('ouvert');
     });
 
+    renderPanier();
+    renderCartButtons();
     afficherContenu('tout');
   </script>
 
