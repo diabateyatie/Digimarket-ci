@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DigiMarket CI — Catalogue</title>
+<style>
+  :root {
+    --kaki-fonce: #3A3924;
+    --kaki-recherche: #4B4A31;
+    --creme-header: #F3EEE2;
+    --fond-clair: #F5F2E6;
+    --creme-carte: #FFFFFF;
+    --orange: #E8944F;
+    --orange-clair: #F2B378;
+    --texte-fonce: #2A2A1C;
+    --texte-clair: #EDE9DA;
+    --gris-texte: #8A8770;
+    --bordure: #E1DCC8;
+    --etoile: #D9A441;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: var(--fond-clair);
+    color: var(--texte-fonce);
+  }
+
+  /* ---------- PARTIE 1 : HEADER (logo, recherche, espace vendeur) ---------- */
+  header.top-bar {
+    background: var(--creme-header);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--kaki-fonce);
+  }
+
+  .logo-bloc { display: flex; align-items: center; gap: 12px; }
+
+  .logo-icone {
+    width: 40px; height: 40px;
+    background: var(--orange);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 18px; flex-shrink: 0;
+  }
+
+  .logo-texte h1 { font-size: 20px; letter-spacing: 0.5px; color: var(--texte-fonce); }
+  .logo-texte p { font-size: 12.5px; color: var(--gris-texte); margin-top: 2px; }
+
+  .recherche {
+    flex: 1; max-width: 460px;
+    display: flex; align-items: center;
+    background: var(--kaki-recherche);
+    border-radius: 8px; padding: 0 14px;
+  }
+
+  .recherche input {
+    border: none; background: transparent; padding: 10px 8px;
+    width: 100%; color: var(--texte-clair); font-size: 14px; outline: none;
+  }
+
+  .recherche input::placeholder { color: #C9C6B4; }
+  .recherche .icone-loupe { color: #C9C6B4; font-size: 15px; }
+
+  .espace-vendeur { display: flex; align-items: center; gap: 14px; }
+
+  .btn-panier {
+    background: var(--creme-carte); border: 1px solid var(--bordure);
+    border-radius: 8px; padding: 9px 12px; font-size: 15px;
+    cursor: pointer; color: var(--texte-fonce);
+  }
+
+  .btn-vendre {
+    background: var(--orange); color: white; border: none;
+    padding: 10px 20px; border-radius: 8px; font-weight: 600;
+    font-size: 14px; cursor: pointer; transition: background 0.15s ease;
+  }
+
+  .btn-vendre:hover { background: var(--orange-clair); }
+
+  /* ---------- PARTIE 2 : LIGNE DE MENU ---------- */
+  nav.menu-categories {
+    background: var(--kaki-fonce);
+    padding: 12px 32px;
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  }
+
+  .cat-btn {
+    background: transparent; border: 1px solid #5C5A3E;
+    color: var(--texte-clair); padding: 8px 16px; border-radius: 999px;
+    font-size: 13.5px; cursor: pointer; transition: all 0.15s ease; white-space: nowrap;
+  }
+
+  .cat-btn:hover { border-color: var(--orange-clair); }
+
+  .cat-btn.actif {
+    background: var(--orange); border-color: var(--orange);
+    color: white; font-weight: 600;
+  }
+
+  .separateur-menu { width: 1px; height: 22px; background: #5C5A3E; margin: 0 4px; }
+
+  .compteur-produits { margin-left: auto; color: #C9C6B4; font-size: 13px; }
+
+  /* ---------- PARTIE 3 : GRILLE PRODUITS / ARTICLES ---------- */
+  main.grille-section {
+    background: var(--fond-clair);
+    padding: 20px 32px 60px;
+  }
+
+  .grille-produits {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  .carte-produit {
+    background: var(--creme-carte);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--bordure);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .carte-produit:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.14);
+  }
+
+  .visuel-produit {
+    height: 130px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .visuel-produit img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 5px;
+    color: white;
+    letter-spacing: 0.4px;
+    z-index: 2;
+  }
+
+  .badge.bestseller { background: var(--orange); }
+  .badge.nouveau { background: #3E6B8A; }
+  .badge.promo { background: #C0433B; }
+
+  .contenu-carte {
+    padding: 11px 13px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .auteur-produit {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--gris-texte);
+    letter-spacing: 0.5px;
+  }
+
+  .titre-produit {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--texte-fonce);
+  }
+
+  .description-courte {
+    font-size: 12px;
+    color: var(--gris-texte);
+    line-height: 1.4;
+    margin-top: 0;
+  }
+
+  .ligne-preuve-sociale {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11.5px;
+    color: var(--gris-texte);
+    margin-top: 2px;
+  }
+
+  .note-etoile { color: var(--etoile); font-weight: 700; }
+  .note-etoile span { color: var(--gris-texte); font-weight: 400; }
+
+  .ligne-bas-carte {
+    margin-top: auto;
+    padding-top: 8px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .bloc-prix { display: flex; align-items: baseline; gap: 8px; }
+
+  .prix-produit { color: var(--orange); font-weight: 700; font-size: 17px; }
+
+  .prix-barre {
+    color: var(--gris-texte);
+    font-size: 13px;
+    text-decoration: line-through;
+  }
+
+  .categorie-tag {
+    font-size: 10.5px;
+    background: var(--kaki-recherche);
+    color: var(--texte-clair);
+    padding: 3px 8px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+
+  .date-article { font-size: 11px; color: var(--gris-texte); }
+
+  @media (max-width: 480px) {
+    .grille-produits { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 380px) {
+    .grille-produits { grid-template-columns: 1fr; }
+    header.top-bar { padding: 14px 18px; }
+    nav.menu-categories, main.grille-section { padding-left: 18px; padding-right: 18px; }
+    .recherche { order: 3; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- PARTIE 1 : logo / recherche / espace vendeur -->
+  <header class="top-bar">
+    <div class="logo-bloc">
+      <div class="logo-icone">DM</div>
+      <div class="logo-texte">
+        <h1>DigiMarket CI</h1>
+        <p>La marketplace des créateurs ivoiriens</p>
+      </div>
+    </div>
+
+    <div class="recherche">
+      <span class="icone-loupe">&#128269;</span>
+      <input type="text" placeholder="Rechercher un ebook, une formation, un template...">
+    </div>
+
+    <div class="espace-vendeur">
+      <button class="btn-panier">&#128722; <span id="compteur-panier">0</span></button>
+      <button class="btn-vendre">Vendre</button>
+    </div>
+  </header>
+
+  <!-- PARTIE 2 : ligne de menu -->
+  <nav class="menu-categories">
+    <button class="cat-btn actif" data-cat="tout">Tout</button>
+    <button class="cat-btn" data-cat="ebook">Ebooks</button>
+    <button class="cat-btn" data-cat="formation">Formations vidéo</button>
+    <button class="cat-btn" data-cat="template">Templates</button>
+    <span class="separateur-menu"></span>
+    <button class="cat-btn" data-cat="blog">Blog</button>
+    <span class="compteur-produits"><span id="nb-produits">12</span> produits</span>
+  </nav>
+
+  <!-- PARTIE 3 : grille produits / articles -->
+  <main class="grille-section">
+    <div class="grille-produits" id="grille-produits"></div>
+  </main>
+
+  <script>
+    const produits = [
+      { id: 1, cat: 'ebook', titre: "Construis-toi de l'intérieur", auteur: "Yatié Coaching", prix: 3500, prixOriginal: null, desc: "Reconstruire son identité intérieure avant la réussite extérieure.", badge: "bestseller", note: 4.9, avis: 214, vues: 1840, img: "ebook-cover-1" },
+      { id: 2, cat: 'ebook', titre: "Discipline Stoïcienne au Quotidien", auteur: "Amara Koné", prix: 2500, prixOriginal: 3200, desc: "Les principes stoïciens appliqués à la vie active.", badge: "promo", note: 4.7, avis: 132, vues: 980, img: "ebook-cover-2" },
+      { id: 3, cat: 'ebook', titre: "Lancer son Business en Côte d'Ivoire", auteur: "Ibrahim Traoré", prix: 4000, prixOriginal: null, desc: "Guide étape par étape pour formaliser son activité.", badge: "nouveau", note: 4.8, avis: 76, vues: 640, img: "ebook-cover-3" },
+      { id: 4, cat: 'ebook', titre: "Vaincre le Syndrome de l'Imposteur", auteur: "Awa Sangaré", prix: 2800, prixOriginal: null, desc: "Comprendre et dépasser le doute qui freine l'action.", badge: null, note: 4.6, avis: 58, vues: 410, img: "ebook-cover-4" },
+      { id: 5, cat: 'formation', titre: "Maîtriser Canva pour Entrepreneurs", auteur: "Fatou Diabaté", prix: 8000, prixOriginal: 10000, desc: "12 vidéos pour créer ses visuels marketing seul.", badge: "promo", note: 4.9, avis: 341, vues: 2210, img: "formation-cover-1" },
+      { id: 6, cat: 'formation', titre: "Vendre sur Mobile Money", auteur: "Yao Kouassi", prix: 6500, prixOriginal: null, desc: "Intégrer les paiements mobiles dans son business.", badge: "bestseller", note: 4.8, avis: 189, vues: 1290, img: "formation-cover-2" },
+      { id: 7, cat: 'formation', titre: "Prise de Parole en Public", auteur: "Aïcha Bamba", prix: 7000, prixOriginal: null, desc: "Gagner en confiance à l'oral en contexte professionnel.", badge: "nouveau", note: 4.7, avis: 94, vues: 720, img: "formation-cover-3" },
+      { id: 8, cat: 'formation', titre: "Photographie Produit avec un Smartphone", auteur: "Moussa Diarra", prix: 5500, prixOriginal: null, desc: "Mettre en valeur ses produits sans matériel pro.", badge: null, note: 4.5, avis: 61, vues: 505, img: "formation-cover-4" },
+      { id: 9, cat: 'template', titre: "Kit Business Plan CI", auteur: "DigiTools CI", prix: 3000, prixOriginal: null, desc: "Modèle adapté aux normes bancaires ivoiriennes.", badge: null, note: 4.6, avis: 47, vues: 380, img: "template-cover-1" },
+      { id: 10, cat: 'template', titre: "Templates Réseaux Sociaux Pack", auteur: "Studio Créatif Abidjan", prix: 2000, prixOriginal: 2600, desc: "30 visuels prêts à l'emploi pour Instagram et Facebook.", badge: "promo", note: 4.9, avis: 268, vues: 1990, img: "template-cover-2" },
+      { id: 11, cat: 'template', titre: "Modèle CV Professionnel", auteur: "Cabinet RH Plus", prix: 1500, prixOriginal: null, desc: "Trame de CV moderne pour le marché de l'emploi ivoirien.", badge: "bestseller", note: 4.8, avis: 302, vues: 2450, img: "template-cover-3" },
+      { id: 12, cat: 'template', titre: "Pack Factures & Devis Pro", auteur: "ComptaFacile CI", prix: 1800, prixOriginal: null, desc: "Modèles prêts à remplir pour facturer ses clients.", badge: "nouveau", note: 4.6, avis: 39, vues: 290, img: "template-cover-4" }
+    ];
+
+    const articles = [
+      { titre: "Comment structurer son offre de formation en ligne", auteur: "Équipe DigiMarket", date: "12 juin", desc: "Les bases pour construire une offre claire et vendable.", badge: null, img: "blog-cover-1" },
+      { titre: "5 erreurs à éviter en vendant des ebooks en Afrique de l'Ouest", auteur: "Awa Sangaré", date: "9 juin", desc: "Des pièges fréquents qui freinent les premières ventes.", badge: "nouveau", img: "blog-cover-2" },
+      { titre: "Mobile Money : le nerf de la guerre du e-commerce ivoirien", auteur: "Yao Kouassi", date: "5 juin", desc: "Pourquoi le paiement mobile décide du succès en ligne.", badge: null, img: "blog-cover-3" },
+      { titre: "Construire une marque personnelle en tant que créateur", auteur: "Fatou Diabaté", date: "2 juin", desc: "Se rendre reconnaissable avant de vendre quoi que ce soit.", badge: null, img: "blog-cover-4" },
+      { titre: "Stoïcisme et entrepreneuriat : rester stable dans l'incertitude", auteur: "Yatié Coaching", date: "29 mai", desc: "Une philosophie ancienne appliquée aux défis du business.", badge: "bestseller", img: "blog-cover-5" },
+      { titre: "Pourquoi le marché des templates explose en Côte d'Ivoire", auteur: "Studio Créatif Abidjan", date: "26 mai", desc: "La demande locale pour des outils visuels prêts à l'emploi.", badge: null, img: "blog-cover-6" },
+      { titre: "Fixer le juste prix de son ebook : méthode simple", auteur: "Ibrahim Traoré", date: "23 mai", desc: "Une méthode concrète pour ne pas sous-évaluer son travail.", badge: null, img: "blog-cover-7" },
+      { titre: "3 outils gratuits pour créer des visuels professionnels", auteur: "Équipe DigiMarket", date: "20 mai", desc: "Des alternatives accessibles sans budget design.", badge: "nouveau", img: "blog-cover-8" },
+      { titre: "La discipline avant la motivation", auteur: "Amara Koné", date: "17 mai", desc: "Ce que les entrepreneurs abidjanais répètent le plus souvent.", badge: null, img: "blog-cover-9" },
+      { titre: "Comment protéger ses fichiers numériques contre le piratage", auteur: "DigiTools CI", date: "14 mai", desc: "Des réflexes simples avant de mettre un produit en vente.", badge: null, img: "blog-cover-10" },
+      { titre: "Vendre une formation vidéo sans expérience technique", auteur: "Moussa Diarra", date: "11 mai", desc: "Le matériel minimal pour se lancer sérieusement.", badge: null, img: "blog-cover-11" },
+      { titre: "L'infériorité imposée : la déconstruire pour mieux entreprendre", auteur: "Yatié Coaching", date: "8 mai", desc: "Un regard critique sur les freins psychologiques hérités.", badge: "bestseller", img: "blog-cover-12" }
+    ];
+
+    const grille = document.getElementById('grille-produits');
+    const boutonsCat = document.querySelectorAll('.cat-btn');
+    const nbProduitsEl = document.getElementById('nb-produits');
+    const compteurLabel = document.querySelector('.compteur-produits');
+
+    function urlImage(seed) {
+      return `https://picsum.photos/seed/${seed}/500/400`;
+    }
+
+    function formaterPrix(prix) { return prix.toLocaleString('fr-FR') + ' FCFA'; }
+    function nomCategorie(cat) { return { ebook: 'Ebook', formation: 'Formation vidéo', template: 'Template' }[cat]; }
+    function nomBadge(b) {
+      return { bestseller: 'Bestseller', nouveau: 'Nouveau', promo: 'Promo' }[b] || '';
+    }
+
+    function carteProduit(p) {
+      return `
+        <div class="carte-produit">
+          <div class="visuel-produit">
+            ${p.badge ? `<span class="badge ${p.badge}">${nomBadge(p.badge)}</span>` : ''}
+            <img src="${urlImage(p.img)}" alt="${p.titre}" loading="lazy">
+          </div>
+          <div class="contenu-carte">
+            <span class="auteur-produit">${p.auteur}</span>
+            <span class="titre-produit">${p.titre}</span>
+            <span class="description-courte">${p.desc}</span>
+            <div class="ligne-preuve-sociale">
+              <span class="note-etoile">★ ${p.note.toFixed(1)} <span>(${p.avis})</span></span>
+              <span>↗ ${p.vues.toLocaleString('fr-FR')}</span>
+            </div>
+            <div class="ligne-bas-carte">
+              <div class="bloc-prix">
+                <span class="prix-produit">${formaterPrix(p.prix)}</span>
+                ${p.prixOriginal ? `<span class="prix-barre">${formaterPrix(p.prixOriginal)}</span>` : ''}
+              </div>
+              <span class="categorie-tag">${nomCategorie(p.cat)}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function carteArticle(a) {
+      return `
+        <div class="carte-produit">
+          <div class="visuel-produit">
+            ${a.badge ? `<span class="badge ${a.badge}">${a.badge === 'bestseller' ? 'À la une' : 'Nouveau'}</span>` : ''}
+            <img src="${urlImage(a.img)}" alt="${a.titre}" loading="lazy">
+          </div>
+          <div class="contenu-carte">
+            <span class="auteur-produit">${a.auteur}</span>
+            <span class="titre-produit">${a.titre}</span>
+            <span class="description-courte">${a.desc}</span>
+            <div class="ligne-bas-carte">
+              <span class="date-article">${a.date}</span>
+              <span class="categorie-tag">Blog</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function afficherContenu(mode) {
+      if (mode === 'blog') {
+        grille.innerHTML = articles.map(carteArticle).join('');
+        nbProduitsEl.textContent = articles.length;
+        compteurLabel.lastChild.textContent = ' articles';
+        return;
+      }
+      const liste = mode === 'tout' ? produits : produits.filter(p => p.cat === mode);
+      grille.innerHTML = liste.map(carteProduit).join('');
+      nbProduitsEl.textContent = liste.length;
+      compteurLabel.lastChild.textContent = ' produits';
+    }
+
+    boutonsCat.forEach(btn => {
+      btn.addEventListener('click', () => {
+        boutonsCat.forEach(b => b.classList.remove('actif'));
+        btn.classList.add('actif');
+        afficherContenu(btn.dataset.cat);
+      });
+    });
+
+    afficherContenu('tout');
+  </script>
+
+</body>
+</html>
